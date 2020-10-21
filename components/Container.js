@@ -13,9 +13,13 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
+    maxWidth: 700,
+    alignSelf: 'center',
+    width: '100%',
   },
   innerContainer: {
     padding: 20,
+    flex: 1,
   },
 });
 

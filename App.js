@@ -1,11 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { AppLoading } from 'expo';
 import {
   configureFonts,
   DefaultTheme,
   Provider as PaperProvider,
-  Text,
 } from 'react-native-paper';
 import {
   useFonts,
@@ -14,8 +12,22 @@ import {
   OpenSans_300Light,
 } from '@expo-google-fonts/open-sans';
 import { Montserrat_400Regular } from '@expo-google-fonts/montserrat';
-import Header from './components/Header';
-import Container from './components/Container';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Home from './screens/Home';
+import CardGameView from './screens/CardGameView';
+
+const RootStack = createStackNavigator();
+const MainStack = createStackNavigator();
+
+const MainStackScreen = () => {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen name="Home" component={Home} />
+      <MainStack.Screen name="CardGameView" component={CardGameView} />
+    </MainStack.Navigator>
+  );
+};
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -49,19 +61,24 @@ export default function App() {
       ...DefaultTheme.colors,
       primary: '#336785',
       accent: '#43bee6',
+      // Custom colors
+      success: '#41B768',
+      error: '#f05A23',
     },
     fonts: configureFonts(fontConfig),
   };
 
   return (
     <PaperProvider theme={theme}>
-      <Container>
-        <Container.Inner>
-          <Header>A Very Special Header</Header>
-          <Text>Almost before we knew it, we had left the ground.</Text>
-        </Container.Inner>
-      </Container>
-      <StatusBar style="auto" />
+      <NavigationContainer>
+        <RootStack.Navigator>
+          <RootStack.Screen
+            name="Main"
+            component={MainStackScreen}
+            options={{ headerShown: false }}
+          />
+        </RootStack.Navigator>
+      </NavigationContainer>
     </PaperProvider>
   );
 }
