@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Portal,
   Dialog,
@@ -10,64 +10,143 @@ import {
 import {
   View,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
 
 const CardGameDialog = (props) => {
-  const { isOpen, onClose } = props;
-  const [name, setName] = useState('');
-  const [howToUrl, setHowToUrl] = useState('');
-  const [minAge, setMinAge] = useState();
-  const [numPlayers, setNumPlayers] = useState('');
-  const [doesRequireSpecialDeck, setDoesRequireSpecialDeck] = useState(false);
+  const { isOpen, onClose, handleCardGameSave } = props;
+  const { control, handleSubmit, errors } = useForm();
+
+  const onSubmit = (data) => {
+    handleCardGameSave(data);
+  };
+
+  const isIos = Platform.OS === 'ios';
 
   return (
     <Portal>
-      <Dialog visible={isOpen}>
-        <Dialog.Title>Add a Card Game</Dialog.Title>
-        <Dialog.Content>
+      <Dialog visible={isOpen} onDismiss={onClose} style={styles.dialog}>
+        <KeyboardAvoidingView behavior={isIos ? 'padding' : 'height'}>
           <TouchableWithoutFeedback
-            onPress={Keyboard.dismiss}
-            accessible={false}
+            onPress={isIos ? Keyboard.dismiss : () => {}}
           >
-            <TextInput label="Name" value={name} onChangeText={setName} />
+            <View>
+              <Dialog.Title>Add a Card Game</Dialog.Title>
+              <Dialog.Content>
+                <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                    <TextInput
+                      label="Name"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.name}
+                    />
+                  )}
+                  name="name"
+                  rules={{ required: true }}
+                  defaultValue=""
+                />
+                <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                    <TextInput
+                      label="How to Play Url"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.howToPlayUrl}
+                    />
+                  )}
+                  name="howToPlayUrl"
+                  rules={{ required: true }}
+                  defaultValue=""
+                />
+                <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                    <TextInput
+                      label="Minimum Age"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      keyboardType="numeric"
+                      error={errors.minAge}
+                    />
+                  )}
+                  name="minAge"
+                  rules={{ required: true }}
+                  defaultValue=""
+                />
+                <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                    <TextInput
+                      label="Number of Players"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.numPlayers}
+                    />
+                  )}
+                  name="numPlayers"
+                  rules={{ required: true }}
+                  defaultValue=""
+                />
+                <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                    <View style={styles.switchWrapper}>
+                      <Text>Requires a special deck?</Text>
+                      <Switch
+                        value={value}
+                        onValueChange={onChange}
+                        onBlur={onBlur}
+                      />
+                    </View>
+                  )}
+                  name="requiresSpecialDeck"
+                  defaultValue={false}
+                />
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={onClose}>Cancel</Button>
+                <Button onPress={handleSubmit(onSubmit)}>Save</Button>
+              </Dialog.Actions>
+            </View>
           </TouchableWithoutFeedback>
-
-          <TextInput
-            label="How to Play Url"
-            value={howToUrl}
-            onChangeText={setHowToUrl}
-          />
-          <TextInput
-            label="Minimum Age"
-            value={minAge}
-            onChangeText={setMinAge}
-            keyboardType="numeric"
-          />
-          <TextInput
-            label="Number of Players"
-            value={numPlayers}
-            onChangeText={setNumPlayers}
-          />
-          <View style={styles.switchWrapper}>
-            <Text>Requires a special deck?</Text>
-            <Switch
-              value={doesRequireSpecialDeck}
-              onValueChange={setDoesRequireSpecialDeck}
-            />
-          </View>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={onClose}>Cancel</Button>
-          <Button onPress={onClose}>Save</Button>
-        </Dialog.Actions>
+        </KeyboardAvoidingView>
       </Dialog>
     </Portal>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  dialog: {
+    // This seems like a lame hack but I'm not sure how else
+    // to "un-center" the dialog vertically to account for
+    // more room for the keyboard on iOS.  You can only target
+    // the dialog, not its parent which has
+    // "justify-content: center" applied by default
+    position: 'absolute',
+    top: 100,
+    marginHorizontal: 20,
+    right: 0,
+    left: 0,
+  },
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: 'space-around',
+  },
   switchWrapper: {
     display: 'flex',
     flexDirection: 'row',

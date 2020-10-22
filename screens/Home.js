@@ -20,11 +20,13 @@ const CardGameCard = (props) => {
     navigation.navigate('CardGameView', { game });
   };
 
+  const source = imgSrc ? imgSrc : require('../assets/defaultGame.jpg');
+
   return (
     <TouchableOpacity onPress={handleCardPress}>
       <Card style={styles.card}>
         <Card.Title title={name} />
-        {imgSrc ? <Card.Cover source={imgSrc} /> : null}
+        <Card.Cover source={source} />
       </Card>
     </TouchableOpacity>
   );
@@ -32,6 +34,12 @@ const CardGameCard = (props) => {
 
 const Home = ({ navigation }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [data, setData] = useState(cardGames);
+
+  const onCardGameSave = (cardGame) => {
+    setData((prevData) => [cardGame, ...prevData]);
+    setIsDialogOpen(false);
+  };
 
   return (
     <Container>
@@ -39,7 +47,7 @@ const Home = ({ navigation }) => {
         <View style={styles.fabWrapper}>
           <Header>Card Games</Header>
           <FlatList
-            data={cardGames}
+            data={data}
             keyExtractor={(item) => item.name}
             renderItem={({ item }) => (
               <CardGameCard game={item} navigation={navigation} />
@@ -55,6 +63,7 @@ const Home = ({ navigation }) => {
         <CardGameDialog
           isOpen={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
+          handleCardGameSave={(cardGame) => onCardGameSave(cardGame)}
         />
       </Container.Inner>
     </Container>
