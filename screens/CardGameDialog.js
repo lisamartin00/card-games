@@ -127,9 +127,6 @@ const CardGameDialog = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   dialog: {
     // This seems like a lame hack but I'm not sure how else
     // to "un-center" the dialog vertically to account for
@@ -141,11 +138,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     right: 0,
     left: 0,
-  },
-  inner: {
-    padding: 24,
-    flex: 1,
-    justifyContent: 'space-around',
   },
   switchWrapper: {
     display: 'flex',
