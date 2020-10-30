@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -6,8 +6,7 @@ import {
   Dimensions,
   View,
 } from 'react-native';
-import { Card, FAB } from 'react-native-paper';
-import Header from '../components/Header';
+import { Card, Icon, Text, ThemeContext } from 'react-native-elements';
 import Container from '../components/Container';
 import CardGameDialog from '../screens/CardGameDialog';
 import cardGames from '../lib/constants/cardGames';
@@ -26,7 +25,7 @@ const CardGameCard = (props) => {
     <TouchableOpacity onPress={handleCardPress}>
       <Card style={styles.card}>
         <Card.Title title={name} />
-        <Card.Cover source={source} />
+        <Card.Image source={{ uri: source }} />
       </Card>
     </TouchableOpacity>
   );
@@ -35,6 +34,9 @@ const CardGameCard = (props) => {
 const Home = ({ navigation }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState(cardGames);
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
 
   const onCardGameSave = (cardGame) => {
     setData((prevData) => [cardGame, ...prevData]);
@@ -45,7 +47,20 @@ const Home = ({ navigation }) => {
     <Container>
       <Container.Inner>
         <View style={styles.fabWrapper}>
-          <Header>Card Games</Header>
+          <Text h1>Card Games</Text>
+          <Icon
+            type="material-community"
+            name="plus"
+            color={colors.primary}
+            reverse
+            //containerStyle={styles.fab}
+            onPress={() => setIsDialogOpen(true)}
+          />
+          <CardGameDialog
+            isOpen={isDialogOpen}
+            onClose={() => setIsDialogOpen(false)}
+            handleCardGameSave={(cardGame) => onCardGameSave(cardGame)}
+          />
           <FlatList
             data={data}
             keyExtractor={(item) => item.name}
@@ -53,18 +68,7 @@ const Home = ({ navigation }) => {
               <CardGameCard game={item} navigation={navigation} />
             )}
           />
-          <FAB
-            icon="plus"
-            color="white"
-            style={styles.fab}
-            onPress={() => setIsDialogOpen(true)}
-          />
         </View>
-        <CardGameDialog
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          handleCardGameSave={(cardGame) => onCardGameSave(cardGame)}
-        />
       </Container.Inner>
     </Container>
   );

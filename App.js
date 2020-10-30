@@ -1,10 +1,6 @@
 import React from 'react';
 import { AppLoading } from 'expo';
-import {
-  configureFonts,
-  DefaultTheme,
-  Provider as PaperProvider,
-} from 'react-native-paper';
+import { ThemeProvider } from 'react-native-elements';
 import {
   useFonts,
   OpenSans_400Regular,
@@ -41,35 +37,34 @@ export default function App() {
     return <AppLoading />;
   }
 
-  const fontConfig = {
-    default: {
-      regular: {
-        fontFamily: 'OpenSans_400Regular',
-      },
-      medium: {
-        fontFamily: 'OpenSans_600SemiBold',
-      },
-      light: {
-        fontFamily: 'OpenSans_300Light',
-      },
-    },
-  };
-
   const theme = {
-    ...DefaultTheme,
     colors: {
-      ...DefaultTheme.colors,
       primary: '#336785',
-      accent: '#43bee6',
-      // Custom colors
+      secondary: '#43bee6',
       success: '#41B768',
       error: '#f05A23',
     },
-    fonts: configureFonts(fontConfig),
+    Text: {
+      style: {
+        fontFamily: 'OpenSans_400Regular',
+      },
+      h1Style: {
+        fontFamily: 'Montserrat_400Regular',
+      },
+      h2Style: {
+        fontFamily: 'Montserrat_400Regular',
+      },
+      h3Style: {
+        fontFamily: 'Montserrat_400Regular',
+      },
+      h4Style: {
+        fontFamily: 'Montserrat_400Regular',
+      },
+    },
   };
 
   return (
-    <PaperProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <NavigationContainer>
         <RootStack.Navigator>
           <RootStack.Screen
@@ -79,6 +74,6 @@ export default function App() {
           />
         </RootStack.Navigator>
       </NavigationContainer>
-    </PaperProvider>
+    </ThemeProvider>
   );
 }

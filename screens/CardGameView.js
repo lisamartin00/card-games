@@ -1,15 +1,15 @@
-import React from 'react';
-import { Linking, StyleSheet, TouchableOpacity } from 'react-native';
-import { DataTable } from 'react-native-paper';
+import React, { useContext } from 'react';
+import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ThemeContext, ListItem, Text } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useTheme } from 'react-native-paper';
 import Container from '../components/Container';
-import Header from '../components/Header';
 
 const CardGameView = (props) => {
   const { route } = props;
   const game = route?.params?.game;
-  const { colors } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
 
   if (!game) {
     return null;
@@ -27,31 +27,37 @@ const CardGameView = (props) => {
   return (
     <Container>
       <Container.Inner>
-        <Header>{name}</Header>
-        <DataTable>
-          <DataTable.Row>
-            <DataTable.Cell>How to Play</DataTable.Cell>
-            <DataTable.Cell style={styles.right}>
-              <TouchableOpacity onPress={() => Linking.openURL(howToPlayUrl)}>
-                <Icon name="open-in-new" size={24} color={colors.accent} />
-              </TouchableOpacity>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Ages</DataTable.Cell>
-            <DataTable.Cell style={styles.right}>{`${minAge}+`}</DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Players</DataTable.Cell>
-            <DataTable.Cell style={styles.right}>{numPlayers}</DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Special deck?</DataTable.Cell>
-            <DataTable.Cell style={styles.right}>
-              <Icon {...getSpecialDeckIconProps()} size={24} />
-            </DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
+        <Text h1>{name}</Text>
+        <TouchableOpacity onPress={() => Linking.openURL(howToPlayUrl)}>
+          <ListItem>
+            <ListItem.Content>
+              <ListItem.Title>How to Play</ListItem.Title>
+            </ListItem.Content>
+            <Icon name="open-in-new" size={24} color={colors.accent} />
+          </ListItem>
+        </TouchableOpacity>
+        <ListItem>
+          <ListItem.Content>
+            <ListItem.Title>Ages</ListItem.Title>
+          </ListItem.Content>
+          <View style={styles.right}>
+            <Text>{`${minAge}+`}</Text>
+          </View>
+        </ListItem>
+        <ListItem>
+          <ListItem.Content>
+            <ListItem.Title>Players</ListItem.Title>
+          </ListItem.Content>
+          <View style={styles.right}>
+            <Text>{numPlayers}</Text>
+          </View>
+        </ListItem>
+        <ListItem>
+          <ListItem.Content>
+            <ListItem.Title>Special deck?</ListItem.Title>
+          </ListItem.Content>
+          <Icon {...getSpecialDeckIconProps()} size={24} />
+        </ListItem>
       </Container.Inner>
     </Container>
   );
@@ -62,7 +68,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: -1, // https://reactnative.dev/docs/0.46/layout-props#flex
     width: 40,
-    textAlign: 'center',
+    textAlign: 'right',
+    marginRight: 5,
   },
 });
 
