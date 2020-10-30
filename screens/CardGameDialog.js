@@ -7,24 +7,8 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  Modal,
 } from 'react-native';
-//import Modal from 'modal-react-native-web';
 import { useForm, Controller } from 'react-hook-form';
-
-// const ModalChildren = (props) => {
-//   const { onClose, handleCardGameSave } = props;
-//   const { control, handleSubmit, errors } = useForm();
-//   const isIos = Platform.OS === 'ios';
-
-//   const onSubmit = (data) => {
-//     handleCardGameSave(data);
-//   };
-
-//   return (
-
-//   );
-// };
 
 const CardGameDialog = (props) => {
   const { isOpen, onClose, handleCardGameSave } = props;
@@ -127,7 +111,6 @@ const CardGameDialog = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      {/* {isWeb ? <>hm</> : <ModalChildren />} */}
     </Overlay>
   );
 };
@@ -135,18 +118,7 @@ const CardGameDialog = (props) => {
 const styles = (isOpen) =>
   StyleSheet.create({
     dialog: {
-      // This seems like a lame hack but I'm not sure how else
-      // to "un-center" the dialog vertically to account for
-      // more room for the keyboard on iOS.  You can only target
-      // the dialog, not its parent which has
-      // "justify-content: center" applied by default
-      // position: 'absolute',
-      // top: 100,
-      // marginHorizontal: 20,
-      // right: 0,
-      // left: 0,
       overflow: 'scroll',
-      //height: 800,
     },
     overlay: {
       display: isOpen ? 'flex' : 'none',
