@@ -25,7 +25,7 @@ const CardGameCard = (props) => {
     <TouchableOpacity onPress={handleCardPress}>
       <Card style={styles.card}>
         <Card.Title title={name} />
-        <Card.Image source={{ uri: source }} />
+        <Card.Image source={source} />
       </Card>
     </TouchableOpacity>
   );
